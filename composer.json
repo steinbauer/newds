@@ -1,5 +1,7 @@
 {
   "name": "steinbauer/newds",
+  "description": "NewDs reboorn project",
+  "license": "AGPL-3.0-only",
   "require": {},
   "autoload": {
     "psr-4": {

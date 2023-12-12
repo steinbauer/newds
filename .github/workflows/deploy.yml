@@ -1,8 +1,8 @@
-name: Deploy to Main
+name: Deploy
 
 on:
   workflow_run:
-    workflows: ["PHP CI"]
+    workflows: ["Test"]
     types:
       - completed
     branches:
@@ -11,20 +11,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    container:
-      image: registry.polyweb.cz/servers-carpi/docker/docker-rancher-agent:latest
+    needs: test
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Docker Login
+        run: docker login -u ${{ secrets.COMPOSER_USERNAME }} -p ${{ secrets.COMPOSER_PASSWORD }} registry.polyweb.cz
 
-      - name: Deploy to Main
-        env:
-          RANCHER_ENVIRONMENT: ${{ secrets.RANCHER_ENVIRONMENT_DEVELOP }}
-          MICROSERVICE_IMAGE: ${{ github.repository }}/${{ github.ref_name }}
-          RANCHER_STACK_NAME: "newds"
-          WEB_PROJECT_ROOT: "newds"
-        run:
-          #rancher up --file docker-compose.github.yml --rancher-file rancher-compose.yml --pull --force-upgrade --confirm-upgrade -d --stack $RANCHER_STACK_NAME app cron migrations
-          rancher up --file docker-compose.github.yml --pull --force-upgrade --confirm-upgrade -d --stack $RANCHER_STACK_NAME app
+      - name: Deploy using Rancher
+        run: echo "Deploying to Rancher, under construction..."

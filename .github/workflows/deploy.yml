@@ -11,16 +11,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: "Environments - polypress - ds1"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Docker Login
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
         run: |
-          echo "$DOCKER_PASSWORD" | docker login registry.polyweb.cz --username "$DOCKER_USERNAME" --password-stdin
+          echo "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" | docker login registry.polyweb.cz --username "${{ secrets.DOCKER_REGISTRY_USERNAME }}" --password-stdin
 
       - name: Build and Deploy
         run: |

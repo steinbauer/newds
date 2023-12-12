@@ -16,10 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: TEST echo
-        run: echo ${{ secrets.COMPOSER_USERNAME }}
-
-      - name: TEST echo2
-        run: echo ${{ COMPOSER_USERNAME }}
+        run: echo xxx ${{ secrets.COMPOSER_USERNAME }} xxx
 
       - name: Docker Login
         run: echo ${{ secrets.COMPOSER_PASSWORD }} | docker login registry.polyweb.cz --username ${{ secrets.COMPOSER_USERNAME }} --password-stdin

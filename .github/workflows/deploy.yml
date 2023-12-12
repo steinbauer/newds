@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   workflow_run:
-    workflows: ["Test", "Build"]
+    workflows: ["Test"]
     types:
       - completed
     branches:
@@ -16,8 +16,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Docker Login
-        run: docker login -u ${{ secrets.COMPOSER_USERNAME }} -p ${{ secrets.COMPOSER_PASSWORD }} registry.polyweb.cz
+#      - name: Docker Login
+#        run: docker login -u ${{ secrets.COMPOSER_USERNAME }} -p ${{ secrets.COMPOSER_PASSWORD }} registry.polyweb.cz
 
       - name: Deploy using Rancher
         run: echo "Deploying to Rancher, under construction..."

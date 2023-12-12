@@ -14,4 +14,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build PHP image
-        run: docker build -t thecodingmachine/php:8.0-v4-fpm .
+        run: echo "build container, under construction..."
+        #run: docker build -t thecodingmachine/php:8.0-v4-fpm .

@@ -11,22 +11,20 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: "Environments - polypress - ds1"
+    container:
+      image: registry.polyweb.cz/servers-carpi/docker/docker-rancher-agent:latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Docker Login
-        run: |
-          echo "${{ secrets.COMPOSER_PASSWORD }}" | docker login registry.polyweb.cz --username "${{ secrets.COMPOSER_USERNAME }}" --password-stdin
-          echo "${{ secrets.COMPOSER_PASSWORD }}" | docker login composer.polyweb.cz --username "${{ secrets.COMPOSER_USERNAME }}" --password-stdin
 
-      - name: Build and Deploy
-        run: |
-          #docker build -t my-custom-image:latest .
-          #rancher up --file docker-compose.github.yml --pull --force-upgrade --confirm-upgrade -d --stack $RANCHER_STACK_NAME app
+      - name: Deploy to Main
         env:
-          RANCHER_ENVIRONMENT: ${{ secrets.RANCHER_ENVIRONMENT }}
+          RANCHER_ENVIRONMENT: ${{ secrets.RANCHER_ENVIRONMENT_DEVELOP }}
           MICROSERVICE_IMAGE: ${{ github.repository }}/${{ github.ref_name }}
           RANCHER_STACK_NAME: "newds"
           WEB_PROJECT_ROOT: "newds"
+        run:
+          #rancher up --file docker-compose.github.yml --rancher-file rancher-compose.yml --pull --force-upgrade --confirm-upgrade -d --stack $RANCHER_STACK_NAME app cron migrations
+          rancher up --file docker-compose.github.yml --pull --force-upgrade --confirm-upgrade -d --stack $RANCHER_STACK_NAME app

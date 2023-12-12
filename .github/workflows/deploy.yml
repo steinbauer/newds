@@ -11,19 +11,24 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    container:
-      image: registry.polyweb.cz/servers-carpi/docker/docker-rancher-agent:latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy to Main
+      - name: Docker Login
+        run: echo ${{ secrets.DOCKER_REGISTRY_PASSWORD }} | docker login registry.polyweb.cz --username ${{ secrets.DOCKER_REGISTRY_USERNAME }} --password-stdin
+
+      - name: Create Composer Auth File
+        run: |
+          mkdir -p $HOME/.composer
+          echo '{"http-basic": {"composer.polyweb.cz": {"username": "${{ secrets.COMPOSER_USERNAME }}", "password": "${{ secrets.COMPOSER_PASSWORD }}"}}}' > $HOME/.composer/auth.json
+
+      - name: Build and Deploy
+        run: |
+          #docker build -t my-custom-image:latest .
+          #rancher up --file docker-compose.github.yml --pull --force-upgrade --confirm-upgrade -d --stack $RANCHER_STACK_NAME app
         env:
-          RANCHER_ENVIRONMENT: ${{ secrets.RANCHER_ENVIRONMENT_DEVELOP }}
+          RANCHER_ENVIRONMENT: ${{ secrets.RANCHER_ENVIRONMENT }}
           MICROSERVICE_IMAGE: ${{ github.repository }}/${{ github.ref_name }}
           RANCHER_STACK_NAME: "newds"
           WEB_PROJECT_ROOT: "newds"
-        run:
-          #rancher up --file docker-compose.github.yml --rancher-file rancher-compose.yml --pull --force-upgrade --confirm-upgrade -d --stack $RANCHER_STACK_NAME app cron migrations
-          rancher up --file docker-compose.github.yml --pull --force-upgrade --confirm-upgrade -d --stack $RANCHER_STACK_NAME app

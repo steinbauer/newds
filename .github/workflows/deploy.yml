@@ -3,8 +3,8 @@ name: Deploy to Main
 on:
   workflow_run:
     workflows: ["build"]
-    types:
-      - completed
+#    types:
+#      - completed
     branches:
       - main
 
@@ -18,7 +18,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy to Development
+      - name: Deploy to Main
         env:
           RANCHER_ENVIRONMENT: ${{ secrets.RANCHER_ENVIRONMENT_DEVELOP }}
           MICROSERVICE_IMAGE: ${{ github.repository }}/${{ github.ref_name }}

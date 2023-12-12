@@ -3,8 +3,8 @@ name: Deploy to Main
 on:
   workflow_run:
     workflows: ["PHP CI"]
-#    types:
-#      - completed
+    types:
+      - completed
     branches:
       - main
 

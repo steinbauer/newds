@@ -19,6 +19,7 @@ jobs:
       - name: Docker Login
         run: |
           echo "${{ secrets.COMPOSER_PASSWORD }}" | docker login registry.polyweb.cz --username "${{ secrets.COMPOSER_USERNAME }}" --password-stdin
+          echo "${{ secrets.COMPOSER_PASSWORD }}" | docker login composer.polyweb.cz --username "${{ secrets.COMPOSER_USERNAME }}" --password-stdin
 
       - name: Build and Deploy
         run: |
